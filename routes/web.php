@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('index');
-});
+})->name('home');
 
 Route::get('/login', function () {
     return view('login');
@@ -34,6 +35,11 @@ Route::get('/success-checkout', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+// Socialite Routes
+Route::get('/login/google', [UserController::class, 'google'])->name('login.google');
+Route::get('/auth/google/callback', [UserController::class, 'googleCallback'])->name('login.google.callback');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
