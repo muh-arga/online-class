@@ -14,4 +14,13 @@ class Camp extends Model
         'title',
         'price',
     ];
+
+    public function getIsRegisteredAttribute()
+    {
+        if(!auth()->check()) return false;
+
+        return Checkout::where('user_id', auth()->id())
+            ->where('camp_id', $this->id)
+            ->exists();
+    }
 }
