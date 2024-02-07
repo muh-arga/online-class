@@ -8,6 +8,8 @@ use App\Models\Camp;
 use App\Models\Checkout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Checkout\AfterCheckout;
 
 class CheckoutController extends Controller
 {
@@ -38,8 +40,6 @@ class CheckoutController extends Controller
      */
     public function store(Store $request, Camp $camp)
     {
-        return $request->all();
-
         // Mapping request data
         $data = $request->all();
         $data['user_id'] = Auth::id();
@@ -60,6 +60,9 @@ class CheckoutController extends Controller
 
         // Create Checkout
         $checkout = Checkout::create($data);
+
+        // Send Email
+        Mail::to(Auth::user()->email)->send(new AfterCheckout($checkout));
 
         return redirect()->route('checkout.success');
     }

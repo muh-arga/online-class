@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\User\AfterRegistered;
 
 class UserController extends Controller
 {
@@ -30,9 +32,15 @@ class UserController extends Controller
             'email_verified_at' => now(),
         ];
 
-        $user = User::updateOrCreate([
-            'email' => $data['email']
-        ], $data);
+        // $user = User::updateOrCreate([
+        //     'email' => $data['email']
+        // ], $data);
+
+        $user = User::where('email', $data['email'])->first();
+        if(!$user) {
+            $user = User::create($data);
+            Mail::to($user->email)->send(new AfterRegistered($user));
+        }
 
         Auth::login($user);
 
