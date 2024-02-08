@@ -59,9 +59,8 @@ class CheckoutController extends Controller
         $data['name'] = $data['name'];
         $data['email'] = $data['email'];
         $data['occupation'] = $data['occupation'];
-        $data['card_number'] = $data['card_number'];
-        $data['expired'] = $data['expired'];
-        $data['cvc'] = $data['cvc'];
+        $data['phone'] = $data['phone'];
+        $data['address'] = $data['address'];
 
         // Update User Data
         $user = Auth::user();
@@ -156,16 +155,16 @@ class CheckoutController extends Controller
             'shipping_address' => $userData
         ];
 
-        $midtransParams = [
+        $midtrans_params = [
             'transaction_details' => $transaction_details,
-            'item_details' => $items_details,
+            'item_details' => [$items_details],
             'customer_details' => $customer_details
         ];
 
         try {
             //Get Snap Payment Url
 
-            $paymentUrl = \Midtrans\Snap::createTransaction($midtransParams)->redirect_url;
+            $paymentUrl = Midtrans\Snap::createTransaction($midtrans_params)->redirect_url;
             $checkout->midtrans_url = $paymentUrl;
             $checkout->save();
 
@@ -177,7 +176,7 @@ class CheckoutController extends Controller
 
     public function midtransCallback(Request $request)
     {
-        $notif = new Midtrans\Notification();
+        $notif = $request->method() == 'POST' ? new Midtrans\Notification() : Midtrans\Transaction::status($request->order_id);
 
         $transaction_status = $notif->transaction_status;
         $fraud = $notif->fraud_status;
@@ -218,8 +217,6 @@ class CheckoutController extends Controller
 
         $checkout->save();
 
-        return view('checkout.success', [
-            'checkout' => $checkout
-        ]);
+        return view('checkout.success');
     }
 }
