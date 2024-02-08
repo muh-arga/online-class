@@ -174,4 +174,52 @@ class CheckoutController extends Controller
             return false;
         }
     }
+
+    public function midtransCallback(Request $request)
+    {
+        $notif = new Midtrans\Notification();
+
+        $transaction_status = $notif->transaction_status;
+        $fraud = $notif->fraud_status;
+
+        $checkout_id = explode('-', $notif->order_id)[0];
+
+        $checkout = Checkout::find($checkout_id);
+
+        if($transaction_status == 'capture') {
+            if($fraud == 'challenge') {
+                // TODO set payment status in merchant's database to 'challenge'
+                $checkout->payment_status = 'pending';
+            } else if ($fraud == 'accept') {
+                // TODO set payment status in merchant's database to 'success'
+                $checkout->payment_status = 'paid';
+            }
+        } else if($transaction_status == 'cancel') {
+            if($fraud == 'challenge') {
+                // TODO set payment status in merchant's database to 'failure'
+                $checkout->payment_status = 'failed';
+            } else if ($fraud == 'accept') {
+                // TODO set payment status in merchant's database to 'failure'
+                $checkout->payment_status = 'failed';
+            }
+        } else if ($transaction_status == 'settlement') {
+            // TODO set payment status in merchant's database to 'success'
+            $checkout->payment_status = 'paid';
+        } else if ($transaction_status == 'deny') {
+            // TODO you can ignore 'deny', because most of the time it allows payment retries
+            $checkout->payment_status = 'failed';
+        } elseif($transaction_status == 'pending') {
+            // TODO set payment status in merchant's database to 'pending' / waiting payment
+            $checkout->payment_status = 'pending';
+        } else if ($transaction_status == 'expire') {
+            // TODO set payment status in merchant's database to 'failure'
+            $checkout->payment_status = 'failed';
+        }
+
+        $checkout->save();
+
+        return view('checkout.success', [
+            'checkout' => $checkout
+        ]);
+    }
 }
