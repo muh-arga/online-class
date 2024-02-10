@@ -33,37 +33,44 @@
                                 @csrf
                                 <div class="mb-4">
                                     <label class="form-label">Full Name</label>
-                                    <input name="name" type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" value="{{ auth()->user()->name }}">
+                                    <input name="name" type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" value="{{ old('name', auth()->user()->name) }}">
                                     @if ($errors->has('name'))
                                         <span class="text-danger">{{ $errors->first('name') }}</span>
                                     @endif
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">Email Address</label>
-                                    <input name="email" type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" value="{{ auth()->user()->email }}">
+                                    <input name="email" type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" value="{{ old('email', auth()->user()->email) }}">
                                     @if ($errors->has('email'))
                                         <span class="text-danger">{{ $errors->first('email') }}</span>
                                     @endif
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">Occupation</label>
-                                    <input name="occupation" type="text" class="form-control {{ $errors->has('occupation') ? 'is-invalid' : '' }}" value="{{ auth()->user()->occupation }}">
+                                    <input name="occupation" type="text" class="form-control {{ $errors->has('occupation') ? 'is-invalid' : '' }}" value="{{ old('occupation', auth()->user()->occupation) }}">
                                     @if ($errors->has('occupation'))
                                         <span class="text-danger">{{ $errors->first('occupation') }}</span>
                                     @endif
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">Phone</label>
-                                    <input name="phone" type="text" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" value="{{ auth()->user()->phone }}">
+                                    <input name="phone" type="text" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" value="{{ old('phone', auth()->user()->phone) }}">
                                     @if ($errors->has('phone'))
                                         <span class="text-danger">{{ $errors->first('phone') }}</span>
                                     @endif
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">Address</label>
-                                    <input name="address" type="text" class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" value="{{ auth()->user()->address }}">
+                                    <input name="address" type="text" class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" value="{{ old('address', auth()->user()->address) }}">
                                     @if ($errors->has('address'))
                                         <span class="text-danger">{{ $errors->first('address') }}</span>
+                                    @endif
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Discount Code</label>
+                                    <input name="discount" type="text" class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}" value="{{ old('discount') }}">
+                                    @if ($errors->has('discount'))
+                                        <span class="text-danger">{{ $errors->first('discount') }}</span>
                                     @endif
                                 </div>
                                 <button type="submit" class="w-100 btn btn-primary">Pay Now</button>
