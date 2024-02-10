@@ -26,7 +26,15 @@
                                         <tr>
                                             <td>{{ $checkout->User->name }}</td>
                                             <td>{{ $checkout->Camp->title }}</td>
-                                            <td>{{ $checkout->Camp->price }}k</td>
+                                            <td>
+                                                <strong class="d-flex flex-row align-items-center gap-2">
+                                                    Rp{{ $checkout->total }}
+                                                    @if ($checkout->discount_id)
+                                                        <span class="badge bg-success">{{ $checkout->discount_precentage }}%
+                                                            OFF</span>
+                                                    @endif
+                                                </strong>
+                                            </td>
                                             <td>{{ $checkout->created_at->format('M d Y') }}</td>
                                             <td>
                                                 <strong>{{ $checkout->payment_status }}</strong>

@@ -31,14 +31,19 @@
                                     </p>
                                 </td>
                                 <td>
-                                    <strong>${{ $checkout->Camp->price }}K</strong>
+                                    <strong class="d-flex flex-row align-items-center gap-2">
+                                        Rp{{ $checkout->total }}
+                                        @if ($checkout->discount_id)
+                                            <span class="badge bg-success">{{ $checkout->discount_precentage }}% OFF</span>
+                                        @endif
+                                    </strong>
                                 </td>
                                 <td>
                                     <strong>{{ $checkout->payment_status }}</strong>
                                 </td>
                                 <td>
                                     @if($checkout->payment_status == 'waiting')
-                                        <a href="{{ $checkout->midtrans_url }}" class="btn btn-primary">Pay Here</a>
+                                        <a href="{{ $checkout->midtrans_url }}" class="btn btn-primary" target="_blank">Pay Here</a>
                                     @endif
                                 </td>
                                 <td>

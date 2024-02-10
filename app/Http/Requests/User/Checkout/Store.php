@@ -29,6 +29,7 @@ class Store extends FormRequest
             'occupation' => 'required|string',
             'phone' => 'required|string',
             'address' => 'required|string',
+            'discount' => 'nullable|string|max:5|exists:discounts,code,deleted_at,NULL',
         ];
     }
 }
